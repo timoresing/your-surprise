@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday, My Love — Interactive Lyric Keepsake</title>
+
+  <!-- Open Graph tags for a rich link preview when you text her the deployed URL -->
+  <meta property="og:title" content="For You, On Your Birthday ✨" />
+  <meta property="og:description" content="Open this little book, turn up your sound, and read along." />
+  <meta property="og:type" content="website" />
+  <!-- Optional: once deployed, add <meta property="og:image" content="https://your-site.netlify.app/assets/cover.jpg" /> -->
+
+  <!-- Google Fonts: Playfair Display (titles), Lora (lyrics), Caveat (handwritten Polaroid notes) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS for responsive layout & clean UI controls -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- StPageFlip library for realistic 3D hardcover & paper page-turn physics -->
+  <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+
+  <!-- jsmediatags for extracting ID3 metadata (title, artist, lyrics) from uploaded audio -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ambient-glow"></div>
+
+  <!-- Top Bar: Subtle Header & Quick Customizer / File Tester Trigger -->
+  <header class="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 sm:px-6 py-3 pointer-events-none">
+    <div class="pointer-events-auto flex items-center gap-2 text-xs sm:text-sm text-[#e8d8c8]/80">
+      <span class="inline-block w-2 h-2 rounded-full bg-[#dfc078] animate-pulse"></span>
+      <span class="font-display italic tracking-wide hidden sm:inline">A Keepsake Lyric Book</span>
+    </div>
+
+    <div class="pointer-events-auto flex items-center gap-2">
+      <!-- Side page-turn buttons for easy desktop & mobile accessibility -->
+      <button
+        id="prevPageBtn"
+        type="button"
+        title="Previous Page (Left Arrow)"
+        class="px-2.5 py-1.5 rounded-full text-xs bg-white/5 hover:bg-white/15 border border-white/10 text-[#f3e6d8] transition flex items-center gap-1"
+      >
+        <span>‹</span>
+        <span class="hidden md:inline">Prev</span>
+      </button>
+      <button
+        id="nextPageBtn"
+        type="button"
+        title="Next Page (Right Arrow)"
+        class="px-2.5 py-1.5 rounded-full text-xs bg-white/5 hover:bg-white/15 border border-white/10 text-[#f3e6d8] transition flex items-center gap-1"
+      >
+        <span class="hidden md:inline">Next</span>
+        <span>›</span>
+      </button>
+
+      <button
+        id="openCustomizerBtn"
+        type="button"
+        class="ml-1 px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#dfc078]/15 hover:bg-[#dfc078]/25 border border-[#dfc078]/40 text-[#f5e3b3] transition flex items-center gap-1.5 shadow-sm"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+        </svg>
+        <span>Preview Your MP3 & Photos</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Book Stage -->
+  <main class="book-stage">
+    <div id="bookWrapper" class="book-wrapper">
+      <!-- StPageFlip renders the interactive 3D book inside this container -->
+      <div id="flipbook"></div>
+    </div>
+
+    <!-- Subtle hint beneath the book -->
+    <p id="bookHint" class="mt-4 text-xs text-[#e8d8c8]/60 text-center tracking-wide">
+      Click the cover button to begin • Click page corners or use ← / → keys anytime
+    </p>
+  </main>
+
+  <!-- Sleek Floating Bottom Audio & Sync Control Dock -->
+  <footer class="fixed bottom-3 sm:bottom-5 left-0 right-0 z-30 px-3 sm:px-6 flex justify-center pointer-events-none">
+    <div class="player-dock pointer-events-auto w-full max-w-2xl rounded-2xl px-3.5 sm:px-5 py-2.5 sm:py-3 flex flex-col gap-2">
+      <div class="flex items-center justify-between gap-3">
+        <!-- Play / Pause Button -->
+        <button
+          id="playPauseBtn"
+          type="button"
+          aria-label="Play or Pause"
+          class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#e7cb83] to-[#c49a45] text-[#281017] flex items-center justify-center shrink-0 shadow-md hover:brightness-105 active:scale-95 transition"
+        >
+          <svg id="playIcon" class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          <svg id="pauseIcon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+          </svg>
+        </button>
+
+        <!-- Track Title & Scrubber -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between text-[11px] sm:text-xs text-[#e9d8c7]/80 mb-1">
+            <span id="audioSourceLabel" class="truncate font-medium text-[#f5e3b3]">
+              ♪ Built-in Music Box Melody (Demo)
+            </span>
+            <span id="timeDisplay" class="tabular-nums shrink-0 ml-2 text-[#e9d8c7]/70">
+              0:00 / 0:36
+            </span>
+          </div>
+
+          <div class="relative flex items-center">
+            <input
+              id="progressSlider"
+              type="range"
+              min="0"
+              max="36"
+              step="0.1"
+              value="0"
+              aria-label="Song progress"
+              class="scrubber w-full"
+            />
+          </div>
+        </div>
+
+        <!-- Auto-Sync Toggle Pill & Spread Counter -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button
+            id="autoSyncToggle"
+            type="button"
+            title="Toggle automatic page turning with the music"
+            class="px-2.5 py-1.5 rounded-full text-[11px] font-medium border transition flex items-center gap-1.5 bg-[#dfc078]/20 border-[#dfc078]/50 text-[#f7e5b4]"
+          >
+            <span id="syncDot" class="w-1.5 h-1.5 rounded-full bg-[#dfc078]"></span>
+            <span>Auto-Flip: <strong id="syncStateText">ON</strong></span>
+          </button>
+
+          <span
+            id="spreadBadge"
+            class="hidden sm:inline-block px-2.5 py-1 rounded-full text-[11px] bg-white/5 border border-white/10 text-[#e8d8c8]/75 tabular-nums"
+          >
+            Cover
+          </span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-Over Drawer: Quick File Tester & Deployment Guide -->
+  <aside
+    id="customizerDrawer"
+    class="fixed inset-0 z-50 hidden"
+    aria-hidden="true"
+  >
+    <!-- Backdrop -->
+    <div id="drawerBackdrop" class="absolute inset-0 bg-black/65 backdrop-blur-xs"></div>
+
+    <!-- Panel -->
+    <div class="drawer-scroll absolute top-0 right-0 bottom-0 w-full max-w-md bg-[#201418] border-l border-[#dfc078]/25 shadow-2xl p-5 sm:p-6 overflow-y-auto text-[#f7efe6]">
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <div>
+          <h2 class="font-display text-lg font-semibold text-[#f5e3b3]">Test Your Song & Photos</h2>
+          <p class="text-xs text-[#e8d8c8]/70 mt-0.5">Preview local files right now before editing <code>BOOK_CONFIG</code></p>
+        </div>
+        <button
+          id="closeCustomizerBtn"
+          type="button"
+          class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center text-sm"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div class="mt-5 space-y-5 text-sm">
+        <!-- 1. Test Local Audio File -->
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
+          <label class="block font-display text-sm font-semibold text-[#f5e3b3]">
+            1. Load Her Song (.mp3 / .m4a / .wav)
+          </label>
+          <p class="text-xs text-[#e8d8c8]/75 leading-relaxed">
+            Pick an audio file from your computer. The app will automatically extract the song title & artist, search online for synchronized lyrics (LRC), and auto-generate the book spreads!
+          </p>
+          <input
+            id="localAudioInput"
+            type="file"
+            accept="audio/*"
+            class="block w-full text-xs text-[#e8d8c8] file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#dfc078] file:text-[#281017] hover:file:brightness-105 cursor-pointer"
+          />
+
+          <!-- Auto-lyrics search status feedback -->
+          <div id="lyricsStatusContainer" class="hidden text-xs rounded-lg p-2.5 bg-black/40 border border-white/10 space-y-1.5">
+            <div id="lyricsStatusText" class="flex items-center gap-2 text-[#e8d8c8]">
+              <span class="inline-block w-2 h-2 rounded-full bg-[#dfc078] animate-ping"></span>
+              <span>Reading audio tags & fetching lyrics...</span>
+            </div>
+            <!-- Manual search fallback if automatic search needs adjustment -->
+            <div id="lyricsManualSearch" class="hidden pt-1.5 border-t border-white/10 space-y-1.5">
+              <p class="text-[11px] text-[#e8d8c8]/70">Song not matched? Search by title & artist:</p>
+              <div class="flex gap-1.5">
+                <input
+                  id="searchTrackInput"
+                  type="text"
+                  placeholder="Song title (e.g. Golden Hour)"
+                  class="flex-1 px-2.5 py-1 text-xs rounded bg-black/40 border border-white/15 text-[#f7efe6] focus:outline-none focus:border-[#dfc078]"
+                />
+                <input
+                  id="searchArtistInput"
+                  type="text"
+                  placeholder="Artist"
+                  class="w-24 px-2.5 py-1 text-xs rounded bg-black/40 border border-white/15 text-[#f7efe6] focus:outline-none focus:border-[#dfc078]"
+                />
+                <button
+                  id="searchLyricsBtn"
+                  type="button"
+                  class="px-2.5 py-1 text-xs font-medium rounded bg-[#dfc078] text-[#281017] hover:brightness-105 shrink-0"
+                >
+                  Find
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Test Local Photos for Each Spread -->
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+          <label class="block font-display text-sm font-semibold text-[#f5e3b3]">
+            2. Test Photos for Each Spread
+          </label>
+          <p class="text-xs text-[#e8d8c8]/75 leading-relaxed">
+            Select up to 5 photos (one per spread) to see them inside the Polaroid frames.
+          </p>
+          <div id="photoInputsContainer" class="space-y-2"></div>
+        </div>
+
+        <!-- 3. Quick Title Preview -->
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
+          <label class="block font-display text-sm font-semibold text-[#f5e3b3]">
+            3. Quick Cover Title Preview
+          </label>
+          <input
+            id="quickTitleInput"
+            type="text"
+            placeholder="For You, On Your Birthday"
+            class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/15 text-xs text-[#f7efe6] focus:outline-none focus:border-[#dfc078]"
+          />
+          <input
+            id="quickSubtitleInput"
+            type="text"
+            placeholder="Every chapter, every melody, every memory with you"
+            class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/15 text-xs text-[#f7efe6] focus:outline-none focus:border-[#dfc078]"
+          />
+        </div>
+
+        <!-- 4. How to Deploy to Netlify Drop -->
+        <div class="p-4 rounded-xl bg-[#dfc078]/10 border border-[#dfc078]/30 space-y-2 text-xs text-[#f3e6d8]/90 leading-relaxed">
+          <div class="font-display font-semibold text-sm text-[#f5e3b3]">
+            🚀 Ready to Publish on Netlify Drop?
+          </div>
+          <ol class="list-decimal list-inside space-y-1.5 text-[#e8d8c8]/85">
+            <li>Create a folder named <code>birthday-book</code> with this <code>index.html</code>, <code>style.css</code>, <code>script.js</code> and an <code>assets/</code> subfolder containing <code>song.mp3</code> and your photos.</li>
+            <li>Open <code>script.js</code> in any text editor and update <code>BOOK_CONFIG</code> at the top with your paths, lyrics, and exact timestamps (in seconds).</li>
+            <li>Drag the entire <code>birthday-book</code> folder onto <strong>app.netlify.com/drop</strong> to get your shareable link!</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Hidden HTML5 Audio Element (used automatically when audioSrc or a local MP3 is loaded) -->
+  <audio id="songAudio" preload="metadata"></audio>
+
+  <!-- External Script -->
+  <script src="script.js"></script>
+</body>
+</html>

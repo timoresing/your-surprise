@@ -1,0 +1,330 @@
+:root {
+  --bg-deep: #181114;
+  --bg-warm: #2b1b21;
+  --cover-primary: #572130;
+  --cover-dark: #38121d;
+  --gold-foil: #dfc078;
+  --gold-dim: rgba(223, 192, 120, 0.38);
+  --paper-cream: #fcf7ee;
+  --paper-edge: #efe5d3;
+  --ink-main: #2d2226;
+  --ink-muted: #756369;
+  --accent-rose: #b85d6f;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background: radial-gradient(circle at 50% 38%, #362129 0%, #1d1317 58%, #110b0d 100%);
+  color: #f7efe6;
+  font-family: 'Lora', Georgia, serif;
+  user-select: none;
+}
+
+/* Ambient warm candlelight glow & floating dust motes */
+.ambient-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 46%, rgba(235, 179, 128, 0.14), transparent 70%),
+    radial-gradient(circle at 20% 20%, rgba(184, 93, 111, 0.08), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(223, 192, 120, 0.07), transparent 45%);
+  z-index: 0;
+}
+
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-handwriting {
+  font-family: 'Caveat', cursive;
+}
+
+/* Book stage centering */
+.book-stage {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4.25rem 1rem 6.25rem;
+}
+
+.book-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 28px 48px rgba(0, 0, 0, 0.65));
+}
+
+/* Hardcover Styling (Front & Back Covers) */
+.page-hardcover {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      rgba(255, 255, 255, 0.018) 2px,
+      transparent 2px,
+      transparent 6px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.08) 0px,
+      rgba(0, 0, 0, 0.08) 2px,
+      transparent 2px,
+      transparent 6px
+    ),
+    linear-gradient(145deg, var(--cover-primary) 0%, var(--cover-dark) 100%);
+  color: var(--gold-foil);
+  border-radius: 4px 12px 12px 4px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  position: relative;
+}
+
+.page-hardcover.back-cover {
+  border-radius: 12px 4px 4px 12px;
+}
+
+/* Book spine crease on hardcover */
+.page-hardcover.front-cover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 24px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.42) 0%,
+    rgba(255, 255, 255, 0.07) 42%,
+    rgba(0, 0, 0, 0.25) 75%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.page-hardcover.back-cover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  background: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 0.42) 0%,
+    rgba(255, 255, 255, 0.07) 42%,
+    rgba(0, 0, 0, 0.25) 75%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.gold-frame {
+  position: absolute;
+  inset: 16px;
+  border: 1.5px solid var(--gold-dim);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.gold-frame::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(223, 192, 120, 0.2);
+  border-radius: 4px;
+}
+
+.gold-emboss {
+  background: linear-gradient(180deg, #f5e2ad 0%, #d4af5a 55%, #b58d38 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+}
+
+/* Tactile Gold Open/Replay Button */
+.btn-gold-foil {
+  background: linear-gradient(135deg, #e7cb83 0%, #c89f49 100%);
+  color: #2c1018;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid #f7e6b5;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-gold-foil:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.btn-gold-foil:active {
+  transform: translateY(0);
+}
+
+/* Inner Cream Paper Pages */
+.page-paper {
+  background-color: var(--paper-cream);
+  background-image:
+    radial-gradient(rgba(130, 105, 85, 0.055) 1px, transparent 0),
+    linear-gradient(180deg, rgba(255, 252, 245, 0.85), rgba(244, 234, 218, 0.85));
+  background-size: 18px 18px, 100% 100%;
+  color: var(--ink-main);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Realistic center spine shadow for Left & Right facing pages */
+.page-paper.page-left {
+  box-shadow:
+    inset -26px 0 34px -18px rgba(48, 32, 24, 0.24),
+    inset 3px 0 6px rgba(255, 255, 255, 0.7);
+  border-right: 1px solid rgba(120, 96, 80, 0.16);
+}
+
+.page-paper.page-right {
+  box-shadow:
+    inset 26px 0 34px -18px rgba(48, 32, 24, 0.24),
+    inset -3px 0 6px rgba(255, 255, 255, 0.7);
+}
+
+/* Subtle ruled notebook lines on the lyric page */
+.lyric-ruled-area {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 35px,
+    rgba(184, 93, 111, 0.1) 36px
+  );
+}
+
+/* Polaroid Frame + Decorative Washi Tape */
+.polaroid-card {
+  background: #ffffff;
+  padding: 12px 12px 36px 12px;
+  border-radius: 3px;
+  box-shadow:
+    0 10px 24px rgba(43, 28, 22, 0.18),
+    0 2px 6px rgba(43, 28, 22, 0.1);
+  transform: rotate(-2.2deg);
+  transition: transform 0.35s ease;
+  position: relative;
+  width: 100%;
+  max-width: 270px;
+}
+
+.polaroid-card:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.washi-tape {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%) rotate(2.5deg);
+  width: 88px;
+  height: 22px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(219, 146, 158, 0.62),
+    rgba(219, 146, 158, 0.62) 6px,
+    rgba(242, 206, 188, 0.68) 6px,
+    rgba(242, 206, 188, 0.68) 12px
+  );
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Active lyric line highlight */
+.lyric-line {
+  transition: opacity 0.45s ease, transform 0.45s ease, color 0.45s ease;
+  opacity: 0.62;
+  color: var(--ink-main);
+}
+
+.lyric-line.is-active {
+  opacity: 1;
+  color: #6b1d32;
+  transform: scale(1.025);
+  font-weight: 500;
+}
+
+/* Floating Glass Bottom Player Bar */
+.player-dock {
+  background: rgba(26, 17, 21, 0.84);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(223, 192, 120, 0.22);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+}
+
+/* Custom Range Scrubber */
+input[type="range"].scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"].scrubber::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+input[type="range"].scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gold-foil);
+  border: 2px solid #2c1018;
+  margin-top: -4.5px;
+  box-shadow: 0 0 8px rgba(223, 192, 120, 0.6);
+  transition: transform 0.15s ease;
+}
+
+input[type="range"].scrubber::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Custom Scrollbar inside Customizer Drawer */
+.drawer-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.drawer-scroll::-webkit-scrollbar-thumb {
+  background: rgba(223, 192, 120, 0.3);
+  border-radius: 999px;
+}
+
+@media (max-width: 640px) {
+  .polaroid-card {
+    max-width: 215px;
+    padding: 9px 9px 28px 9px;
+  }
+  .gold-frame {
+    inset: 10px;
+  }
+}
