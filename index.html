@@ -24,9 +24,6 @@
   <!-- StPageFlip library for 3D hardcover & paper page-turn physics -->
   <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
 
-  <!-- jsmediatags for extracting ID3 metadata from uploaded audio -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
-
   <!-- External Stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -54,14 +51,6 @@
         <span>›</span>
       </button>
 
-      <button id="openCustomizerBtn" type="button"
-        class="ml-1 px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#dfc078]/15 hover:bg-[#dfc078]/25 border border-[#dfc078]/40 text-[#f5e3b3] transition flex items-center gap-1.5 shadow-sm">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-        </svg>
-        <span>Preview Your MP3 & Photos</span>
-      </button>
     </div>
   </header>
 
@@ -125,102 +114,6 @@
       </div>
     </div>
   </footer>
-
-  <!-- Slide-Over Drawer: Quick File Tester & Deployment Guide -->
-  <aside id="customizerDrawer" class="fixed inset-0 z-50 hidden" aria-hidden="true">
-    <div id="drawerBackdrop" class="absolute inset-0 bg-black/65 backdrop-blur-sm"></div>
-
-    <div
-      class="drawer-scroll absolute top-0 right-0 bottom-0 w-full max-w-md bg-[#201418] border-l border-[#dfc078]/25 shadow-2xl p-5 sm:p-6 overflow-y-auto text-[#f7efe6]">
-      <div class="flex items-center justify-between pb-4 border-b border-white/10">
-        <div>
-          <h2 class="font-display text-lg font-semibold text-[#f5e3b3]">Test Your Song & Photos</h2>
-          <p class="text-xs text-[#e8d8c8]/70 mt-0.5">Preview local files right now before editing
-            <code>BOOK_CONFIG</code>
-          </p>
-        </div>
-        <button id="closeCustomizerBtn" type="button"
-          class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center text-sm">
-          ✕
-        </button>
-      </div>
-
-      <div class="mt-5 space-y-5 text-sm">
-        <!-- 1. Test Local Audio File -->
-        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
-          <label class="block font-display text-sm font-semibold text-[#f5e3b3]">
-            1. Load Her Song (.mp3 / .m4a / .wav)
-          </label>
-          <p class="text-xs text-[#e8d8c8]/75 leading-relaxed">
-            Pick an audio file from your computer. The app will automatically extract the song title & artist, search
-            online for synchronized lyrics (LRC), and auto-generate the book spreads!
-          </p>
-          <input id="localAudioInput" type="file" accept="audio/*"
-            class="block w-full text-xs text-[#e8d8c8] file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#dfc078] file:text-[#281017] hover:file:brightness-105 cursor-pointer" />
-
-          <div id="lyricsStatusContainer"
-            class="hidden text-xs rounded-lg p-2.5 bg-black/40 border border-white/10 space-y-1.5">
-            <div id="lyricsStatusText" class="flex items-center gap-2 text-[#e8d8c8]">
-              <span class="inline-block w-2 h-2 rounded-full bg-[#dfc078] animate-ping"></span>
-              <span>Reading audio tags & fetching lyrics...</span>
-            </div>
-            <div id="lyricsManualSearch" class="hidden pt-1.5 border-t border-white/10 space-y-1.5">
-              <p class="text-[11px] text-[#e8d8c8]/70">Song not matched? Search by title & artist:</p>
-              <div class="flex gap-1.5">
-                <input id="searchTrackInput" type="text" placeholder="Song title (e.g. Golden Hour)"
-                  class="flex-1 px-2.5 py-1 text-xs rounded bg-black/40 border border-white/15 text-[#f7efe6] focus:outline-none focus:border-[#dfc078]" />
-                <input id="searchArtistInput" type="text" placeholder="Artist"
-                  class="w-24 px-2.5 py-1 text-xs rounded bg-black/40 border border-white/15 text-[#f7efe6] focus:outline-none focus:border-[#dfc078]" />
-                <button id="searchLyricsBtn" type="button"
-                  class="px-2.5 py-1 text-xs font-medium rounded bg-[#dfc078] text-[#281017] hover:brightness-105 shrink-0">
-                  Find
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. Test Local Photos for Each Spread -->
-        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
-          <label class="block font-display text-sm font-semibold text-[#f5e3b3]">
-            2. Test Photos for Each Spread
-          </label>
-          <p class="text-xs text-[#e8d8c8]/75 leading-relaxed">
-            Select photos for each spread to preview them inside the Polaroid frames.
-          </p>
-          <div id="photoInputsContainer" class="space-y-2"></div>
-        </div>
-
-        <!-- 3. Quick Title Preview -->
-        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
-          <label class="block font-display text-sm font-semibold text-[#f5e3b3]">
-            3. Quick Cover Title Preview
-          </label>
-          <input id="quickTitleInput" type="text" placeholder="For You, On Your Birthday"
-            class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/15 text-xs text-[#f7efe6] focus:outline-none focus:border-[#dfc078]" />
-          <input id="quickSubtitleInput" type="text" placeholder="Every chapter, every melody, every memory with you"
-            class="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/15 text-xs text-[#f7efe6] focus:outline-none focus:border-[#dfc078]" />
-        </div>
-
-        <!-- 4. How to Deploy to Netlify Drop -->
-        <div
-          class="p-4 rounded-xl bg-[#dfc078]/10 border border-[#dfc078]/30 space-y-2 text-xs text-[#f3e6d8]/90 leading-relaxed">
-          <div class="font-display font-semibold text-sm text-[#f5e3b3]">
-            🚀 Ready to Publish on Netlify Drop?
-          </div>
-          <ol class="list-decimal list-inside space-y-1.5 text-[#e8d8c8]/85">
-            <li>Create a folder named <code>birthday-book</code> with this <code>index.html</code>,
-              <code>style.css</code>, <code>script.js</code> and an <code>assets/</code> subfolder containing
-              <code>song.mp3</code> and your photos.</li>
-            <li>Open <code>script.js</code> in any text editor and update <code>BOOK_CONFIG</code> at the top with your
-              paths, lyrics, and exact timestamps (in seconds).</li>
-            <li>Drag the entire <code>birthday-book</code> folder onto <strong>app.netlify.com/drop</strong> to get your
-              shareable link!</li>
-          </ol>
-        </div>
-      </div>
-    </div>
-  </aside>
 
   <!-- Fullscreen Flower Shower Overlay -->
   <div id="flowerOverlay" class="flower-overlay">

@@ -1342,6 +1342,7 @@ function loadAudioSource(src, labelText) {
 }
 
 function setupCustomizerDrawer() {
+  if (!dom.customizerDrawer) return;
   dom.quickTitleInput.value = BOOK_CONFIG.coverTitle;
   dom.quickSubtitleInput.value = BOOK_CONFIG.coverSubtitle;
   if (dom.searchTrackInput && BOOK_CONFIG.songTitle) {
