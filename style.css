@@ -6,7 +6,6 @@
   --gold-foil: #dfc078;
   --gold-dim: rgba(223, 192, 120, 0.38);
   --paper-cream: #fcf7ee;
-  --paper-edge: #efe5d3;
   --ink-main: #2d2226;
   --ink-muted: #756369;
   --accent-rose: #b85d6f;
@@ -17,7 +16,8 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -29,7 +29,11 @@ html, body {
   user-select: none;
 }
 
-/* Ambient warm candlelight glow & floating dust motes */
+#customizerDrawer {
+  user-select: text;
+}
+
+/* Ambient warm candlelight glow */
 .ambient-glow {
   position: fixed;
   inset: 0;
@@ -75,20 +79,16 @@ html, body {
 /* Hardcover Styling (Front & Back Covers) */
 .page-hardcover {
   background:
-    repeating-linear-gradient(
-      45deg,
+    repeating-linear-gradient(45deg,
       rgba(255, 255, 255, 0.018) 0px,
       rgba(255, 255, 255, 0.018) 2px,
       transparent 2px,
-      transparent 6px
-    ),
-    repeating-linear-gradient(
-      -45deg,
+      transparent 6px),
+    repeating-linear-gradient(-45deg,
       rgba(0, 0, 0, 0.08) 0px,
       rgba(0, 0, 0, 0.08) 2px,
       transparent 2px,
-      transparent 6px
-    ),
+      transparent 6px),
     linear-gradient(145deg, var(--cover-primary) 0%, var(--cover-dark) 100%);
   color: var(--gold-foil);
   border-radius: 4px 12px 12px 4px;
@@ -109,13 +109,11 @@ html, body {
   bottom: 0;
   left: 0;
   width: 24px;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.42) 0%,
-    rgba(255, 255, 255, 0.07) 42%,
-    rgba(0, 0, 0, 0.25) 75%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(0, 0, 0, 0.42) 0%,
+      rgba(255, 255, 255, 0.07) 42%,
+      rgba(0, 0, 0, 0.25) 75%,
+      transparent 100%);
   pointer-events: none;
 }
 
@@ -126,13 +124,11 @@ html, body {
   bottom: 0;
   right: 0;
   width: 24px;
-  background: linear-gradient(
-    270deg,
-    rgba(0, 0, 0, 0.42) 0%,
-    rgba(255, 255, 255, 0.07) 42%,
-    rgba(0, 0, 0, 0.25) 75%,
-    transparent 100%
-  );
+  background: linear-gradient(270deg,
+      rgba(0, 0, 0, 0.42) 0%,
+      rgba(255, 255, 255, 0.07) 42%,
+      rgba(0, 0, 0, 0.25) 75%,
+      transparent 100%);
   pointer-events: none;
 }
 
@@ -194,7 +190,6 @@ html, body {
   overflow: hidden;
 }
 
-/* Realistic center spine shadow for Left & Right facing pages */
 .page-paper.page-left {
   box-shadow:
     inset -26px 0 34px -18px rgba(48, 32, 24, 0.24),
@@ -210,12 +205,10 @@ html, body {
 
 /* Subtle ruled notebook lines on the lyric page */
 .lyric-ruled-area {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 35px,
-    rgba(184, 93, 111, 0.1) 36px
-  );
+  background-image: repeating-linear-gradient(to bottom,
+      transparent 0px,
+      transparent 35px,
+      rgba(184, 93, 111, 0.1) 36px);
 }
 
 /* Polaroid Frame + Decorative Washi Tape */
@@ -244,13 +237,11 @@ html, body {
   transform: translateX(-50%) rotate(2.5deg);
   width: 88px;
   height: 22px;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(219, 146, 158, 0.62),
-    rgba(219, 146, 158, 0.62) 6px,
-    rgba(242, 206, 188, 0.68) 6px,
-    rgba(242, 206, 188, 0.68) 12px
-  );
+  background: repeating-linear-gradient(45deg,
+      rgba(219, 146, 158, 0.62),
+      rgba(219, 146, 158, 0.62) 6px,
+      rgba(242, 206, 188, 0.68) 6px,
+      rgba(242, 206, 188, 0.68) 12px);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   z-index: 5;
   pointer-events: none;
@@ -314,6 +305,7 @@ input[type="range"].scrubber::-webkit-slider-thumb:hover {
 .drawer-scroll::-webkit-scrollbar {
   width: 6px;
 }
+
 .drawer-scroll::-webkit-scrollbar-thumb {
   background: rgba(223, 192, 120, 0.3);
   border-radius: 999px;
@@ -324,7 +316,183 @@ input[type="range"].scrubber::-webkit-slider-thumb:hover {
     max-width: 215px;
     padding: 9px 9px 28px 9px;
   }
+
   .gold-frame {
     inset: 10px;
   }
+}
+
+/* Clickable back cover bouquet button & hint */
+.back-cover-bouquet {
+  position: relative;
+  width: 88px;
+  height: auto;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
+  animation: gentle-hover 3s ease-in-out infinite alternate;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
+  z-index: 25;
+}
+
+.back-cover-bouquet:hover {
+  transform: scale(1.15) rotate(2deg);
+  filter: drop-shadow(0 6px 12px rgba(223, 192, 120, 0.3));
+}
+
+.back-cover-bouquet:active {
+  transform: scale(0.95);
+}
+
+@keyframes gentle-hover {
+  0% { transform: translateY(0) rotate(-1deg); }
+  100% { transform: translateY(-4px) rotate(1deg); }
+}
+
+@keyframes gentleNudge {
+  0%, 100% {
+    transform: translateX(0) rotate(-6deg);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateX(4px) rotate(-6deg);
+    opacity: 1;
+  }
+}
+
+.click-me-hint {
+  animation: gentleNudge 2.2s ease-in-out infinite;
+}
+
+/* Fullscreen Delphinium Bloom Overlay */
+.flower-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99990;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  background: radial-gradient(circle at center, rgba(30, 16, 24, 0.65) 0%, rgba(12, 6, 10, 0.90) 100%);
+  backdrop-filter: blur(5px);
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.flower-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.overlay-close-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  cursor: pointer;
+}
+
+.hero-center-bouquet {
+  position: fixed;
+  z-index: 99995;
+  pointer-events: none;
+  object-fit: contain;
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 32px rgba(147, 197, 253, 0.42));
+  transition:
+    left 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    top 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: left, top, width, transform;
+}
+
+.hero-center-bouquet.is-floating {
+  animation: heroBouquetFloat 3.4s ease-in-out infinite alternate;
+}
+
+@keyframes heroBouquetFloat {
+  0% { transform: translate(-50%, -50%) rotate(-3deg) scale(1); }
+  100% { transform: translate(-50%, -52%) rotate(3deg) scale(1.04); }
+}
+
+.hero-bouquet-caption {
+  position: fixed;
+  left: 50vw;
+  top: 63vh;
+  transform: translateX(-50%) translateY(16px);
+  width: min(90vw, 440px);
+  text-align: center;
+  z-index: 99998;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-bouquet-caption.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.hero-bouquet-card {
+  padding: 16px 22px;
+  border-radius: 18px;
+  background: rgba(24, 13, 19, 0.86);
+  border: 1px solid rgba(223, 192, 120, 0.45);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(223, 192, 120, 0.14);
+  backdrop-filter: blur(8px);
+}
+
+.hero-bouquet-title {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f3d794;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.hero-bouquet-msg {
+  margin: 8px 0 0;
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(0.85rem, 1.6vw, 0.96rem);
+  font-style: italic;
+  line-height: 1.55;
+  color: #f7ebda;
+}
+
+@keyframes delphiniumFullScreenFall {
+  0% {
+    transform: translate3d(0, -15vh, 0) rotate(var(--rot-start)) scale(0.35);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--max-opacity);
+  }
+  55% {
+    transform: translate3d(var(--dx-mid), 52vh, 0) rotate(var(--rot-mid)) scale(var(--scale-final));
+    opacity: var(--max-opacity);
+  }
+  100% {
+    transform: translate3d(var(--dx-end), 118vh, 0) rotate(var(--rot-end)) scale(var(--scale-final));
+    opacity: 0;
+  }
+}
+
+.falling-delphinium {
+  position: fixed;
+  top: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  z-index: 99992;
+  will-change: transform, opacity;
+  animation: delphiniumFullScreenFall var(--fall-dur, 5.6s) linear forwards;
 }

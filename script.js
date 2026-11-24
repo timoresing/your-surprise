@@ -1,11 +1,5 @@
 /* =====================================================================
    STEP 1: CUSTOMIZE YOUR BOOK HERE (Title, Song, Photos, Lyrics & Times)
-   ---------------------------------------------------------------------
-   - Leave `audioSrc: ""` to play the built-in music-box birthday melody.
-   - To use your own song, place `song.mp3` in an `assets/` folder next
-     to `index.html` and set: `audioSrc: "./assets/song.mp3"`
-   - Set `timestamp` (in seconds) to the exact second in the song when
-     each spread should flip open!
    ===================================================================== */
 const BOOK_CONFIG = {
   coverTitle: "For You, On Your Birthday",
@@ -16,84 +10,40 @@ const BOOK_CONFIG = {
   backCoverMessage:
     "Thank you for being my favorite song, my best friend, and the brightest part of every single day. Wishing you the happiest birthday.",
   backCoverSignature: "Forever yours ♥",
+  backCoverBouquet: "./assets/delphinium-bouquet.png",
 
-  // Example once you add your MP3: "./assets/song.mp3"
-  audioSrc: "",
+  // Text shown directly below the bouquet when you click it on the back cover
+  bouquetBloomTitle: "Delphiniums for My Dearest 🩵",
+  bouquetBloomMessage:
+    "A symbol of pure joy, warmth, and every bright chapter ahead of us. Happy Birthday, my love ♥",
 
-  // Duration (in seconds) used for the built-in music-box demo melody
+  // Configured specifically for LANY - ILYSB (STRIPPED)
+  audioSrc: "./assets/ilysb.mp3",
+  songTitle: "ILYSB - STRIPPED",
+  songArtist: "LANY",
+  lyricOffset: 0, // Nudge in seconds if needed (e.g., -1.5 if lyrics are late, +1.5 if early)
+
+  // Folder containing photo1.jpg, photo2.jpg, ...
+  photoFolder: "./assets/pictures",
+
+  // Duration (in seconds) used if falling back to the built-in demo melody
   demoDuration: 36,
 
-  // Each spread = Left Page (Polaroid memory) + Right Page (Lyrics)
+  // Initial placeholder spread (replaced automatically once lyrics load)
   spreads: [
     {
       timestamp: 0,
-      chapterTitle: "Chapter I • The Beginning",
-      // Example once you add your photo: "./assets/photo1.jpg"
-      photoSrc: "",
-      polaroidCaption: "Where our story first began",
-      lyrics: [
-        "Before the world knew who we'd be,",
-        "A quiet spark found you and me,",
-        "One simple laugh, one glance so true,",
-        "And suddenly my skies turned blue."
-      ]
-    },
-    {
-      timestamp: 7,
-      chapterTitle: "Chapter II • Little Moments",
-      photoSrc: "",
-      polaroidCaption: "Late night talks & coffee runs",
-      lyrics: [
-        "It's in the coffee cups at dawn,",
-        "The playlists playing on and on,",
-        "Every ordinary afternoon",
-        "Feels like a sunlit honeymoon."
-      ]
-    },
-    {
-      timestamp: 14,
-      chapterTitle: "Chapter III • Side by Side",
-      photoSrc: "",
-      polaroidCaption: "Through every season with you",
-      lyrics: [
-        "Through rainy streets and golden days,",
-        "You light the dark in quiet ways,",
-        "No matter where the road may bend,",
-        "My favorite place is with my friend."
-      ]
-    },
-    {
-      timestamp: 21,
-      chapterTitle: "Chapter IV • Today Is Yours",
-      photoSrc: "",
-      polaroidCaption: "Celebrating the magic of you",
-      lyrics: [
-        "So make a wish and close your eyes,",
-        "Beneath these warm and starry skies,",
-        "The world is brighter just because",
-        "You are the wonder that you are."
-      ]
-    },
-    {
-      timestamp: 28,
-      chapterTitle: "Chapter V • Happy Birthday",
-      photoSrc: "",
-      polaroidCaption: "To many more chapters together",
-      lyrics: [
-        "Happy birthday, my sweetest love,",
-        "My lucky star, my skies above,",
-        "Here's to the years we get to write,",
-        "Starting with magic here tonight."
-      ]
+      photoSrc: "./assets/pictures/photo1.jpg",
+      polaroidCaption: '"Loading..."',
+      lyrics: ["Loading ILYSB (STRIPPED) lyrics..."]
     }
   ]
 };
 
 /* =====================================================================
-   ILLUSTRATED POLAROID ARTWORK (Shown automatically when photoSrc is "")
+   ILLUSTRATED POLAROID ARTWORK (Shown automatically if a photo fails/is empty)
    ===================================================================== */
 const FALLBACK_ARTWORKS = [
-  // 0: Crescent Moon & Starry Night
   `<svg viewBox="0 0 300 300" class="w-full h-full block" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="sky0" x1="0" y1="0" x2="0" y2="1">
@@ -112,8 +62,6 @@ const FALLBACK_ARTWORKS = [
     <path d="M0 225 Q90 185 180 218 T300 205 L300 300 L0 300 Z" fill="#23172b"/>
     <path d="M0 248 Q120 220 230 250 T300 242 L300 300 L0 300 Z" fill="#150d1a"/>
   </svg>`,
-
-  // 1: Warm Morning Coffee & Sunbeams
   `<svg viewBox="0 0 300 300" class="w-full h-full block" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="warm1" x1="0" y1="0" x2="1" y2="1">
@@ -130,8 +78,6 @@ const FALLBACK_ARTWORKS = [
     <path d="M162 132 Q154 114 165 96" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
     <rect x="0" y="231" width="300" height="69" fill="#6d3e3b"/>
   </svg>`,
-
-  // 2: Sunset Over Calm Ocean Waves
   `<svg viewBox="0 0 300 300" class="w-full h-full block" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="sunset2" x1="0" y1="0" x2="0" y2="1">
@@ -147,8 +93,6 @@ const FALLBACK_ARTWORKS = [
     <path d="M55 224 Q115 216 175 224 T260 224" fill="none" stroke="#f5b982" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>
     <path d="M85 250 Q150 244 215 250" fill="none" stroke="#f5b982" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
   </svg>`,
-
-  // 3: Glowing Birthday Candle & Golden Sparkles
   `<svg viewBox="0 0 300 300" class="w-full h-full block" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <radialGradient id="glow3" cx="50%" cy="38%" r="55%">
@@ -169,8 +113,6 @@ const FALLBACK_ARTWORKS = [
     <circle cx="96" cy="162" r="2" fill="#f7cf78"/>
     <circle cx="206" cy="154" r="2" fill="#f7cf78"/>
   </svg>`,
-
-  // 4: Two Paper Airplanes Toward Dawn
   `<svg viewBox="0 0 300 300" class="w-full h-full block" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="dawn4" x1="0" y1="0" x2="1" y2="1">
@@ -191,7 +133,7 @@ const FALLBACK_ARTWORKS = [
 ];
 
 /* =====================================================================
-   BUILT-IN WEB AUDIO MUSIC BOX ENGINE (Plays if no MP3 is configured)
+   BUILT-IN WEB AUDIO MUSIC BOX ENGINE
    ===================================================================== */
 class MusicBoxSynth {
   constructor(durationSec = 36) {
@@ -203,31 +145,20 @@ class MusicBoxSynth {
     this.nextNoteIndex = 0;
     this.timerId = null;
 
-    // Gentle 36-second music-box arrangement (Happy Birthday + romantic waltz chimes)
-    // Each tuple: [timeInSeconds, frequencyHz, noteLengthSec]
     const N = {
       C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, Bb4: 466.16,
       C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00
     };
 
     this.notes = [
-      // Phrase 1: "Happy Birthday to you" (0s - 6.5s)
       [0.2, N.C4, 0.45], [0.7, N.C4, 0.35], [1.15, N.D4, 0.9], [2.15, N.C4, 0.9], [3.15, N.F4, 0.9], [4.15, N.E4, 1.6],
       [1.15, N.F4 * 0.5, 1.8], [3.15, N.C4 * 0.5, 2.2],
-
-      // Phrase 2: "Happy Birthday to you" (7s - 13.5s)
       [7.1, N.C4, 0.45], [7.6, N.C4, 0.35], [8.05, N.D4, 0.9], [9.05, N.C4, 0.9], [10.05, N.G4, 0.9], [11.05, N.F4, 1.7],
       [8.05, N.G4 * 0.5, 1.8], [10.05, N.F4 * 0.5, 2.2],
-
-      // Phrase 3: "Happy Birthday, dear love" (14s - 20.5s)
       [14.1, N.C4, 0.45], [14.6, N.C4, 0.35], [15.05, N.C5, 0.95], [16.1, N.A4, 0.95], [17.15, N.F4, 0.85], [18.1, N.E4, 0.85], [19.05, N.D4, 1.5],
       [15.05, N.A4 * 0.5, 2.0], [17.15, N.D4 * 0.5, 2.4],
-
-      // Phrase 4: "Happy Birthday to you" (21s - 27.5s)
       [21.1, N.Bb4, 0.45], [21.6, N.Bb4, 0.35], [22.05, N.A4, 0.95], [23.1, N.F4, 0.95], [24.15, N.G4, 0.95], [25.2, N.F4, 1.9],
       [22.05, N.F4 * 0.5, 1.9], [24.15, N.C4 * 0.5, 2.5],
-
-      // Phrase 5: Gentle Music-Box Coda Arpeggio (28s - 35.5s)
       [28.1, N.F4, 1.1], [28.8, N.A4, 1.1], [29.5, N.C5, 1.2], [30.3, N.F5, 1.6],
       [31.4, N.E5, 1.1], [32.2, N.C5, 1.1], [33.0, N.A4, 1.3], [33.9, N.C5, 2.0],
       [28.1, N.F4 * 0.5, 3.0], [33.9, N.F4 * 0.5, 2.1]
@@ -247,7 +178,6 @@ class MusicBoxSynth {
   _pluckBell(freq, dur) {
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
-
     const osc = this.ctx.createOscillator();
     const overtone = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
@@ -255,7 +185,6 @@ class MusicBoxSynth {
 
     osc.type = "sine";
     osc.frequency.setValueAtTime(freq, now);
-
     overtone.type = "triangle";
     overtone.frequency.setValueAtTime(freq * 2, now);
 
@@ -280,9 +209,7 @@ class MusicBoxSynth {
 
   play() {
     this._ensureContext();
-    if (this.elapsed >= this.duration - 0.1) {
-      this.seek(0);
-    }
+    if (this.elapsed >= this.duration - 0.1) this.seek(0);
     if (this.isPlaying) return;
     this.isPlaying = true;
     this.lastTick = performance.now();
@@ -294,10 +221,7 @@ class MusicBoxSynth {
       this.lastTick = now;
       this.elapsed += dt;
 
-      while (
-        this.nextNoteIndex < this.notes.length &&
-        this.notes[this.nextNoteIndex][0] <= this.elapsed
-      ) {
+      while (this.nextNoteIndex < this.notes.length && this.notes[this.nextNoteIndex][0] <= this.elapsed) {
         const [, freq, dur] = this.notes[this.nextNoteIndex];
         this._pluckBell(freq, dur);
         this.nextNoteIndex++;
@@ -375,15 +299,209 @@ const dom = {
   lyricsManualSearch: document.getElementById("lyricsManualSearch"),
   searchTrackInput: document.getElementById("searchTrackInput"),
   searchArtistInput: document.getElementById("searchArtistInput"),
-  searchLyricsBtn: document.getElementById("searchLyricsBtn")
+  searchLyricsBtn: document.getElementById("searchLyricsBtn"),
+  flowerOverlay: document.getElementById("flowerOverlay"),
+  closeOverlayBtn: document.getElementById("closeOverlayBtn")
 };
 
-/* Format seconds into m:ss */
 function formatTime(sec) {
   if (!isFinite(sec) || sec < 0) sec = 0;
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
   return `${m}:${s < 10 ? "0" : ""}${s}`;
+}
+
+function escapeHtml(str) {
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/* =====================================================================
+   HERO BOUQUET FLY-TO-CENTER + CAPTION + FULL-SCREEN DELPHINIUM BLOOM
+   ===================================================================== */
+let flowInterval = null;
+
+function initBloomOverlay() {
+  const overlay = dom.flowerOverlay;
+  const closeBtn = dom.closeOverlayBtn;
+  if (!overlay) return null;
+
+  if (closeBtn && !closeBtn.dataset.bound) {
+    closeBtn.dataset.bound = "true";
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      stopDelphiniumBloom();
+    });
+  }
+
+  if (!overlay.dataset.backdropBound) {
+    overlay.dataset.backdropBound = "true";
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) {
+        stopDelphiniumBloom();
+      }
+    });
+  }
+
+  return overlay;
+}
+
+function getVisibleBackCoverBouquet() {
+  const candidates = Array.from(document.querySelectorAll("#backCoverBouquet, .back-cover-bouquet"));
+  for (const el of candidates) {
+    const r = el.getBoundingClientRect();
+    if (r.width > 10 && r.height > 10) {
+      return { el, rect: r };
+    }
+  }
+  return { el: candidates[0] || null, rect: null };
+}
+
+function hideClickMeHint() {
+  const hint = document.querySelector(".click-me-hint");
+  if (!hint || hint.classList.contains("hidden")) return;
+  hint.style.animation = "none";
+  hint.style.transition = "opacity 0.3s ease";
+  hint.style.opacity = "0";
+  setTimeout(() => hint.classList.add("hidden"), 300);
+}
+
+function makeFlowerParticle() {
+  const overlay = dom.flowerOverlay;
+  if (!overlay) return;
+
+  const flowerImg = BOOK_CONFIG.backCoverBouquet || "./assets/delphinium-bouquet.png";
+  const el = document.createElement("div");
+  el.className = "falling-delphinium";
+  el.style.backgroundImage = `url('${flowerImg}')`;
+
+  const size = Math.floor(Math.random() * 95) + 45;
+  el.style.width = `${size}px`;
+  el.style.height = `${size}px`;
+  el.style.left = `${Math.random() * 100}vw`;
+
+  el.style.setProperty("--scale-final", (Math.random() * 0.75 + 0.5).toFixed(2));
+  el.style.setProperty("--max-opacity", (Math.random() * 0.4 + 0.6).toFixed(2));
+  el.style.setProperty("--rot-start", `${Math.random() * 180 - 90}deg`);
+  el.style.setProperty("--rot-mid", `${Math.random() * 360}deg`);
+  el.style.setProperty("--rot-end", `${Math.random() * 720}deg`);
+  el.style.setProperty("--dx-mid", `${Math.random() * 240 - 120}px`);
+  el.style.setProperty("--dx-end", `${Math.random() * 440 - 220}px`);
+  el.style.setProperty("--fall-dur", `${(Math.random() * 2.2 + 4.4).toFixed(2)}s`);
+
+  overlay.appendChild(el);
+  setTimeout(() => el.remove(), 6800);
+}
+
+function launchHeroBouquetToCenter() {
+  const overlay = dom.flowerOverlay;
+  if (!overlay) return;
+
+  document.getElementById("heroCenterBouquet")?.remove();
+  document.getElementById("heroBouquetCaption")?.remove();
+
+  const { rect } = getVisibleBackCoverBouquet();
+  const flowerImg = BOOK_CONFIG.backCoverBouquet || "./assets/delphinium-bouquet.png";
+
+  const startRect = rect || {
+    left: window.innerWidth / 2 - 44,
+    top: window.innerHeight / 2 - 44,
+    width: 88,
+    height: 88
+  };
+
+  const targetWidth = Math.min(250, Math.round(window.innerWidth * 0.48), Math.round(window.innerHeight * 0.32));
+  const targetCenterY = Math.round(window.innerHeight * 0.36);
+
+  const hero = document.createElement("img");
+  hero.id = "heroCenterBouquet";
+  hero.src = flowerImg;
+  hero.alt = "Blooming Delphinium Bouquet";
+  hero.className = "hero-center-bouquet";
+
+  hero.style.left = `${startRect.left + startRect.width / 2}px`;
+  hero.style.top = `${startRect.top + startRect.height / 2}px`;
+  hero.style.width = `${Math.max(64, startRect.width)}px`;
+  hero.style.height = "auto";
+  hero.style.transform = "translate(-50%, -50%) rotate(0deg) scale(1)";
+
+  const caption = document.createElement("div");
+  caption.id = "heroBouquetCaption";
+  caption.className = "hero-bouquet-caption";
+  caption.innerHTML = `
+    <div class="hero-bouquet-card">
+      <h3 class="hero-bouquet-title">
+        ${escapeHtml(BOOK_CONFIG.bouquetBloomTitle || "Delphiniums for You")}
+      </h3>
+      <p class="hero-bouquet-msg">
+        ${escapeHtml(BOOK_CONFIG.bouquetBloomMessage || "")}
+      </p>
+    </div>
+  `;
+
+  document.querySelectorAll("#backCoverBouquet, .back-cover-bouquet").forEach((b) => {
+    b.style.opacity = "0";
+  });
+
+  overlay.appendChild(hero);
+  overlay.appendChild(caption);
+
+  void hero.offsetWidth;
+  requestAnimationFrame(() => {
+    hero.style.left = "50vw";
+    hero.style.top = `${targetCenterY}px`;
+    hero.style.width = `${targetWidth}px`;
+    hero.style.transform = "translate(-50%, -50%) rotate(0deg) scale(1)";
+  });
+
+  setTimeout(() => {
+    if (document.body.contains(caption)) {
+      caption.classList.add("is-visible");
+    }
+  }, 420);
+
+  setTimeout(() => {
+    if (document.body.contains(hero)) {
+      hero.classList.add("is-floating");
+    }
+  }, 980);
+}
+
+function triggerDelphiniumBloom() {
+  const overlay = initBloomOverlay();
+  if (!overlay) return;
+
+  hideClickMeHint();
+  overlay.classList.add("show");
+  clearInterval(flowInterval);
+
+  launchHeroBouquetToCenter();
+
+  for (let i = 0; i < 35; i++) {
+    setTimeout(makeFlowerParticle, Math.random() * 500);
+  }
+
+  flowInterval = setInterval(makeFlowerParticle, 110);
+}
+
+function stopDelphiniumBloom() {
+  clearInterval(flowInterval);
+  flowInterval = null;
+
+  if (dom.flowerOverlay) {
+    dom.flowerOverlay.classList.remove("show");
+    dom.flowerOverlay.querySelectorAll(".falling-delphinium").forEach((el) => el.remove());
+  }
+
+  document.getElementById("heroCenterBouquet")?.remove();
+  document.getElementById("heroBouquetCaption")?.remove();
+
+  document.querySelectorAll("#backCoverBouquet, .back-cover-bouquet").forEach((b) => {
+    b.style.opacity = "1";
+  });
 }
 
 /* Build all DOM pages (Front Cover + N*2 Spread Pages + Back Cover) */
@@ -431,19 +549,17 @@ function buildBookPages() {
   `;
   dom.flipbook.appendChild(frontCover);
 
-  // --- INNER SPREAD PAGES (2 facing pages per spread) ---
+  // --- INNER SPREAD PAGES ---
   BOOK_CONFIG.spreads.forEach((spread, idx) => {
     const leftPageNum = idx * 2 + 1;
     const rightPageNum = idx * 2 + 2;
     const fallbackSvg = FALLBACK_ARTWORKS[idx % FALLBACK_ARTWORKS.length];
 
-    // LEFT PAGE: Polaroid Memory & Handwritten Caption
     const leftPage = document.createElement("div");
     leftPage.className = "page page-paper page-left";
     leftPage.innerHTML = `
       <div class="h-full w-full flex flex-col items-center justify-between px-5 sm:px-8 py-6 sm:py-8">
-        <div class="w-full flex items-center justify-between text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-[#8a7278]">
-          <span>${escapeHtml(spread.chapterTitle)}</span>
+        <div class="w-full flex items-center justify-end text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-[#8a7278]">
           <span>${formatTime(spread.timestamp)}</span>
         </div>
 
@@ -475,7 +591,6 @@ function buildBookPages() {
     `;
     dom.flipbook.appendChild(leftPage);
 
-    // RIGHT PAGE: Centered Stanza Lyrics
     const rightPage = document.createElement("div");
     rightPage.className = "page page-paper page-right";
     const lyricsHtml = spread.lyrics
@@ -516,10 +631,10 @@ function buildBookPages() {
   backCover.setAttribute("data-density", "hard");
   backCover.innerHTML = `
     <div class="gold-frame"></div>
-    <div class="relative z-10 h-full w-full flex flex-col items-center justify-between px-7 sm:px-10 py-10 sm:py-12 text-center">
+    <div class="relative z-10 h-full w-full flex flex-col items-center justify-between px-7 sm:px-10 py-8 sm:py-10 text-center">
       <div class="text-xs tracking-[0.3em] text-[#dfc078]/70">♥</div>
 
-      <div class="my-auto space-y-4 max-w-xs">
+      <div class="my-auto space-y-3 max-w-xs flex flex-col items-center">
         <h2 class="font-display text-2xl sm:text-3xl font-bold gold-emboss">
           ${escapeHtml(BOOK_CONFIG.backCoverTitle)}
         </h2>
@@ -527,9 +642,31 @@ function buildBookPages() {
         <p class="text-xs sm:text-sm text-[#f5e6cc]/90 leading-relaxed italic">
           "${escapeHtml(BOOK_CONFIG.backCoverMessage)}"
         </p>
-        <p class="font-handwriting text-2xl sm:text-3xl text-[#dfc078] pt-1">
+        <p class="font-handwriting text-2xl sm:text-3xl text-[#dfc078] pt-0.5">
           ${escapeHtml(BOOK_CONFIG.backCoverSignature)}
         </p>
+
+        <div class="relative inline-flex items-center justify-center my-4">
+          <button
+            id="bouquet-btn"
+            type="button"
+            class="cursor-pointer transition-transform duration-300 hover:scale-105 focus:outline-none"
+            aria-label="Click bouquet"
+          >
+            <img
+              id="backCoverBouquet"
+              src="${escapeHtml(BOOK_CONFIG.backCoverBouquet || "./assets/delphinium-bouquet.png")}"
+              class="back-cover-bouquet mt-1"
+              alt="Click to scatter flowers"
+              title="Tap to make it bloom!"
+            />
+          </button>
+          <span
+            class="click-me-hint pointer-events-none absolute left-full ml-3 whitespace-nowrap flex items-center gap-1 font-handwriting text-lg sm:text-xl text-[#e4c580]/90 -rotate-6"
+          >
+            <span class="text-xs font-sans">←</span> click me!
+          </span>
+        </div>
       </div>
 
       <button
@@ -545,37 +682,109 @@ function buildBookPages() {
   dom.flipbook.appendChild(backCover);
 }
 
-function escapeHtml(str) {
-  return String(str || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+function bindGlobalBookInteractions() {
+  if (document.body.dataset.globalBookBound) return;
+  document.body.dataset.globalBookBound = "true";
+
+  const isPointInsideRect = (x, y, rect, pad = 12) =>
+    rect &&
+    rect.width > 0 &&
+    x >= rect.left - pad &&
+    x <= rect.right + pad &&
+    y >= rect.top - pad &&
+    y <= rect.bottom + pad;
+
+  const findMatchingAction = (ev) => {
+    if (ev.target && ev.target.closest) {
+      if (ev.target.closest("#bouquet-btn, #backCoverBouquet, .back-cover-bouquet")) {
+        return "bouquet";
+      }
+      const actionBtn = ev.target.closest("[data-action]");
+      if (actionBtn) {
+        return actionBtn.getAttribute("data-action");
+      }
+    }
+
+    const clientX =
+      ev.clientX ??
+      (ev.touches && ev.touches[0] && ev.touches[0].clientX) ??
+      (ev.changedTouches && ev.changedTouches[0] && ev.changedTouches[0].clientX);
+    const clientY =
+      ev.clientY ??
+      (ev.touches && ev.touches[0] && ev.touches[0].clientY) ??
+      (ev.changedTouches && ev.changedTouches[0] && ev.changedTouches[0].clientY);
+
+    if (typeof clientX === "number" && typeof clientY === "number") {
+      const totalPages = BOOK_CONFIG.spreads.length * 2 + 2;
+      if (state.currentPage >= totalPages - 1) {
+        const { rect } = getVisibleBackCoverBouquet();
+        if (isPointInsideRect(clientX, clientY, rect, 16)) {
+          return "bouquet";
+        }
+      }
+      for (const btn of document.querySelectorAll("[data-action]")) {
+        const r = btn.getBoundingClientRect();
+        if (isPointInsideRect(clientX, clientY, r, 6)) {
+          return btn.getAttribute("data-action");
+        }
+      }
+    }
+
+    return null;
+  };
+
+  ["mousedown", "touchstart", "pointerdown"].forEach((evtName) => {
+    document.addEventListener(
+      evtName,
+      (ev) => {
+        const matched = findMatchingAction(ev);
+        if (matched) ev.stopPropagation();
+      },
+      true
+    );
+  });
+
+  document.addEventListener(
+    "click",
+    (ev) => {
+      const matched = findMatchingAction(ev);
+      if (!matched) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      if (matched === "bouquet") {
+        triggerDelphiniumBloom();
+      } else if (matched === "start-book") {
+        startExperience();
+      } else if (matched === "replay-book") {
+        replayExperience();
+      }
+    },
+    true
+  );
 }
 
-/* Initialize or Re-initialize St.PageFlip with responsive portrait/landscape settings */
 function initPageFlip(preservePage = 0) {
   if (state.pageFlip) {
     try {
       state.pageFlip.destroy();
-    } catch (err) {
+    } catch {
       // Ignore destroy cleanup errors
     }
     state.pageFlip = null;
   }
 
-  // StPageFlip modifies and creates internal wrapper elements around flipbook.
-  // Replacing flipbook with a pristine clone ensures a clean DOM tree for re-initialization.
-  const oldFlipbook = document.getElementById("flipbook");
   const bookWrapper = document.getElementById("bookWrapper");
-  if (oldFlipbook && bookWrapper) {
+  if (bookWrapper) {
+    bookWrapper.innerHTML = "";
     const cleanFlipbook = document.createElement("div");
     cleanFlipbook.id = "flipbook";
-    bookWrapper.replaceChild(cleanFlipbook, oldFlipbook);
+    bookWrapper.appendChild(cleanFlipbook);
     dom.flipbook = cleanFlipbook;
   }
 
   buildBookPages();
+  bindGlobalBookInteractions();
 
   const mobilePortrait = window.innerWidth < 768;
   state.isPortrait = mobilePortrait;
@@ -596,7 +805,7 @@ function initPageFlip(preservePage = 0) {
     showCover: true,
     mobileScrollSupport: false,
     usePortrait: mobilePortrait,
-    flippingTime: 850,
+    flippingTime: 480,
     startPage: safeStartPage
   });
 
@@ -612,26 +821,9 @@ function initPageFlip(preservePage = 0) {
     state.isFlipping = e.data === "flipping" || e.data === "user_fold";
   });
 
-  // Prevent StPageFlip drag capture when clicking cover CTA buttons
-  dom.flipbook.querySelectorAll("[data-action]").forEach((btn) => {
-    ["mousedown", "touchstart", "pointerdown"].forEach((evtName) => {
-      btn.addEventListener(evtName, (ev) => ev.stopPropagation());
-    });
-    btn.addEventListener("click", (ev) => {
-      ev.stopPropagation();
-      const action = btn.getAttribute("data-action");
-      if (action === "start-book") {
-        startExperience();
-      } else if (action === "replay-book") {
-        replayExperience();
-      }
-    });
-  });
-
   updateSpreadBadge(safeStartPage);
 }
 
-/* Update the bottom-right Spread / Cover pill badge */
 function updateSpreadBadge(pageIndex) {
   const totalPages = BOOK_CONFIG.spreads.length * 2 + 2;
   if (pageIndex === 0) {
@@ -644,7 +836,6 @@ function updateSpreadBadge(pageIndex) {
   }
 }
 
-/* Smoothly turn to targetPage without triggering duplicate flips mid-animation */
 function turnToPage(targetPage) {
   if (!state.pageFlip) return;
   const totalPages = BOOK_CONFIG.spreads.length * 2 + 2;
@@ -658,12 +849,11 @@ function turnToPage(targetPage) {
 
   try {
     state.pageFlip.flip(targetPage);
-  } catch (err) {
+  } catch {
     state.isFlipping = false;
   }
 }
 
-/* Core Audio-to-Page Sync Logic */
 function handlePlaybackProgress(currentTime, duration) {
   dom.progressSlider.max = duration || BOOK_CONFIG.demoDuration;
   dom.progressSlider.value = currentTime;
@@ -672,27 +862,40 @@ function handlePlaybackProgress(currentTime, duration) {
   const spreads = BOOK_CONFIG.spreads;
   if (!spreads.length) return;
 
-  // Determine active spread index from timestamps
+  const syncedTime = Math.max(0, currentTime + (BOOK_CONFIG.lyricOffset || 0));
+
   let activeSpreadIdx = 0;
   for (let i = 0; i < spreads.length; i++) {
-    if (currentTime >= spreads[i].timestamp) {
+    if (syncedTime >= spreads[i].timestamp) {
       activeSpreadIdx = i;
     } else {
       break;
     }
   }
 
-  // Highlight the currently active lyric line within the active spread
   const spreadStart = spreads[activeSpreadIdx].timestamp;
   const spreadEnd =
     activeSpreadIdx < spreads.length - 1
       ? spreads[activeSpreadIdx + 1].timestamp
       : Math.max(duration - 1.5, spreadStart + 4);
   const spreadSpan = Math.max(1, spreadEnd - spreadStart);
-  const progressInSpread = Math.max(0, Math.min(0.999, (currentTime - spreadStart) / spreadSpan));
+  const progressInSpread = Math.max(0, Math.min(0.999, (syncedTime - spreadStart) / spreadSpan));
 
   const lines = spreads[activeSpreadIdx].lyrics;
-  const activeLineIdx = Math.floor(progressInSpread * lines.length);
+  const lineTimes = spreads[activeSpreadIdx].lineTimestamps;
+  let activeLineIdx = 0;
+
+  if (Array.isArray(lineTimes) && lineTimes.length === lines.length) {
+    for (let i = 0; i < lineTimes.length; i++) {
+      if (syncedTime >= lineTimes[i]) {
+        activeLineIdx = i;
+      } else {
+        break;
+      }
+    }
+  } else {
+    activeLineIdx = Math.floor(progressInSpread * lines.length);
+  }
 
   document.querySelectorAll(".lyric-line.is-active").forEach((el) => {
     el.classList.remove("is-active");
@@ -704,28 +907,32 @@ function handlePlaybackProgress(currentTime, duration) {
     currentLineEl.classList.add("is-active");
   }
 
-  // Auto-flip page when Auto-Sync is enabled and playback is active
   if (!state.autoSync || !state.isPlaying) return;
 
-  // Flip to Back Cover right at the end of the song
   if (duration > 0 && currentTime >= duration - 0.6) {
     const backCoverIndex = spreads.length * 2 + 1;
     turnToPage(backCoverIndex);
     return;
   }
 
-  // In Landscape (2 pages visible), spread i is page (i * 2 + 1).
-  // In Mobile Portrait (1 page visible), show Polaroid (i * 2 + 1) for first 45% of stanza,
-  // then flip to Lyrics (i * 2 + 2) for the remainder of the stanza!
-  let targetPage = activeSpreadIdx * 2 + 1;
+  const flipTime = syncedTime + 0.55;
+  let flipSpreadIdx = 0;
+  for (let i = 0; i < spreads.length; i++) {
+    if (flipTime >= spreads[i].timestamp) {
+      flipSpreadIdx = i;
+    } else {
+      break;
+    }
+  }
+
+  let targetPage = flipSpreadIdx * 2 + 1;
   if (state.isPortrait && progressInSpread >= 0.45) {
-    targetPage = activeSpreadIdx * 2 + 2;
+    targetPage = flipSpreadIdx * 2 + 2;
   }
 
   turnToPage(targetPage);
 }
 
-/* Playback Controls (Unified for HTML5 <audio> and Web Audio MusicBoxSynth) */
 function playAudio() {
   state.isPlaying = true;
   updatePlayPauseUI();
@@ -771,13 +978,12 @@ function updatePlayPauseUI() {
 }
 
 function startExperience() {
-  if (state.currentPage === 0) {
-    turnToPage(1);
-  }
+  if (state.currentPage === 0) turnToPage(1);
   playAudio();
 }
 
 function replayExperience() {
+  stopDelphiniumBloom();
   state.autoSync = true;
   updateAutoSyncUI();
   seekAudio(0);
@@ -798,12 +1004,11 @@ function updateAutoSyncUI() {
   }
 }
 
-/* Re-render the photo inputs list in the drawer whenever spreads change */
 function renderPhotoInputs() {
   if (!dom.photoInputsContainer) return;
   dom.photoInputsContainer.innerHTML = BOOK_CONFIG.spreads
     .map(
-      (sp, i) => `
+      (_, i) => `
       <div class="flex items-center justify-between gap-2 text-xs">
         <span class="text-[#e8d8c8]/80 shrink-0">Spread ${i + 1}:</span>
         <input
@@ -839,17 +1044,6 @@ function renderPhotoInputs() {
   });
 }
 
-/* =====================================================================
-   AUTOMATIC LYRICS GENERATION & METADATA DETECTION
-   ===================================================================== */
-
-/* Roman numerals helper for chapter headers */
-function toRomanNumeral(num) {
-  const roman = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
-  return roman[num - 1] || String(num);
-}
-
-/* Parse standard .LRC timestamp string format [mm:ss.xx] into seconds and text */
 function parseLrc(lrcText) {
   if (!lrcText || typeof lrcText !== "string") return [];
   const lines = lrcText.split("\n");
@@ -862,7 +1056,7 @@ function parseLrc(lrcText) {
     if (!matches.length) continue;
 
     const text = line.replace(timeRegex, "").trim();
-    if (!text) continue; // Skip blank musical gap timestamps
+    if (!text) continue;
 
     for (const match of matches) {
       const minutes = parseInt(match[1], 10);
@@ -876,10 +1070,8 @@ function parseLrc(lrcText) {
   return result.sort((a, b) => a.time - b.time);
 }
 
-/* Clean audio filename to extract likely track name and artist */
 function parseSongFilename(filename) {
-  const base = filename.replace(/\.[^/.]+$/, ""); // strip extension
-  // Often formatted as: "Artist - Song Name" or "Song Name - Artist" or "Artist _ Song Name"
+  const base = filename.replace(/\.[^/.]+$/, "");
   const separators = [" - ", " – ", " — ", "_", "-"];
   for (const sep of separators) {
     if (base.includes(sep)) {
@@ -892,7 +1084,6 @@ function parseSongFilename(filename) {
   return { artist: "", title: base };
 }
 
-/* Read ID3/MP4 metadata from file using jsmediatags */
 function readAudioTags(file) {
   return new Promise((resolve) => {
     if (typeof window.jsmediatags === "undefined" || !window.jsmediatags.read) {
@@ -901,12 +1092,8 @@ function readAudioTags(file) {
     }
     try {
       window.jsmediatags.read(file, {
-        onSuccess: (tag) => {
-          resolve(tag.tags || null);
-        },
-        onError: () => {
-          resolve(null);
-        }
+        onSuccess: (tag) => resolve(tag.tags || null),
+        onError: () => resolve(null)
       });
     } catch {
       resolve(null);
@@ -914,26 +1101,22 @@ function readAudioTags(file) {
   });
 }
 
-/* Group parsed lyrics into book spreads (typically 4-6 lines per spread) */
-function groupLyricsIntoSpreads(parsedLines, totalDuration) {
+function groupLyricsIntoSpreads(parsedLines) {
   if (!parsedLines.length) return [];
   const linesPerSpread = 4;
+  const folder = (BOOK_CONFIG.photoFolder || "./assets/pictures").replace(/\/$/, "");
   const spreads = [];
-  const totalSpreads = Math.ceil(parsedLines.length / linesPerSpread);
 
   for (let i = 0; i < parsedLines.length; i += linesPerSpread) {
     const chunk = parsedLines.slice(i, i + linesPerSpread);
     const spreadIndex = Math.floor(i / linesPerSpread);
-    const startTime = chunk[0].time;
     const lines = chunk.map((c) => c.text);
-
-    // Keep existing photo if spread index was already populated
-    const existingPhoto = BOOK_CONFIG.spreads[spreadIndex]?.photoSrc || "";
+    const existing = BOOK_CONFIG.spreads[spreadIndex] || {};
 
     spreads.push({
-      timestamp: startTime,
-      chapterTitle: `Chapter ${toRomanNumeral(spreadIndex + 1)} • Part ${spreadIndex + 1}`,
-      photoSrc: existingPhoto,
+      timestamp: chunk[0].time,
+      lineTimestamps: chunk.map((c) => c.time),
+      photoSrc: existing.photoSrc || `${folder}/photo${spreadIndex + 1}.jpg`,
       polaroidCaption: lines[0] ? `"${lines[0]}"` : "A cherished memory",
       lyrics: lines
     });
@@ -942,32 +1125,28 @@ function groupLyricsIntoSpreads(parsedLines, totalDuration) {
   return spreads;
 }
 
-/* Fallback: generate spreads from plain un-synced lyrics by distributing timestamps evenly */
 function groupPlainLyricsIntoSpreads(plainText, totalDuration) {
   const lines = plainText
     .split("\n")
     .map((l) => l.trim())
-    .filter((l) => l.length > 0 && !l.startsWith("[")); // filter headers like [Chorus]
+    .filter((l) => l.length > 0 && !l.startsWith("["));
 
   if (!lines.length) return [];
   const linesPerSpread = 4;
   const numSpreads = Math.ceil(lines.length / linesPerSpread);
-  const dur = totalDuration > 10 ? totalDuration : 180;
-  // Leave a 5-sec buffer at start and end
-  const usableDuration = Math.max(10, dur - 10);
-  const timeStep = usableDuration / numSpreads;
-
+  const dur = totalDuration > 10 ? totalDuration : 244;
+  const timeStep = Math.max(10, dur - 10) / numSpreads;
+  const folder = (BOOK_CONFIG.photoFolder || "./assets/pictures").replace(/\/$/, "");
   const spreads = [];
+
   for (let i = 0; i < lines.length; i += linesPerSpread) {
     const chunk = lines.slice(i, i + linesPerSpread);
     const spreadIdx = Math.floor(i / linesPerSpread);
-    const startTime = Math.round((5 + spreadIdx * timeStep) * 10) / 10;
-    const existingPhoto = BOOK_CONFIG.spreads[spreadIdx]?.photoSrc || "";
+    const existing = BOOK_CONFIG.spreads[spreadIdx] || {};
 
     spreads.push({
-      timestamp: startTime,
-      chapterTitle: `Chapter ${toRomanNumeral(spreadIdx + 1)} • Part ${spreadIdx + 1}`,
-      photoSrc: existingPhoto,
+      timestamp: Math.round((5 + spreadIdx * timeStep) * 10) / 10,
+      photoSrc: existing.photoSrc || `${folder}/photo${spreadIdx + 1}.jpg`,
       polaroidCaption: chunk[0] ? `"${chunk[0]}"` : "A cherished memory",
       lyrics: chunk
     });
@@ -976,30 +1155,27 @@ function groupPlainLyricsIntoSpreads(plainText, totalDuration) {
   return spreads;
 }
 
-/* Query LRCLIB for synced (or plain) lyrics */
 async function queryLrclib(title, artist, durationSec) {
-  // Try exact lookup first if artist is provided
+  const targetDuration = durationSec > 0 ? durationSec : 244;
+
   if (artist && title) {
     try {
       const getUrl = new URL("https://lrclib.net/api/get");
       getUrl.searchParams.set("track_name", title);
       getUrl.searchParams.set("artist_name", artist);
-      if (durationSec > 0) {
-        getUrl.searchParams.set("duration", Math.round(durationSec));
-      }
+      getUrl.searchParams.set("duration", Math.round(targetDuration));
       const res = await fetch(getUrl.toString(), {
         headers: { "Lrclib-Client": "BirthdayBookKeepsake/1.0" }
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.syncedLyrics || data.plainLyrics) return data;
+        if (data.syncedLyrics) return data;
       }
     } catch {
       // Continue to search endpoint
     }
   }
 
-  // Fallback to search endpoint
   try {
     const searchUrl = new URL("https://lrclib.net/api/search");
     searchUrl.searchParams.set("q", `${title} ${artist}`.trim());
@@ -1009,9 +1185,16 @@ async function queryLrclib(title, artist, durationSec) {
     if (res.ok) {
       const results = await res.json();
       if (Array.isArray(results) && results.length > 0) {
-        // Prefer one that has synced lyrics
-        const withSynced = results.find((r) => r.syncedLyrics && r.syncedLyrics.trim().length > 0);
-        return withSynced || results[0];
+        const synced = results.filter((r) => r.syncedLyrics && r.syncedLyrics.trim().length > 0);
+        if (synced.length > 0) {
+          synced.sort(
+            (a, b) =>
+              Math.abs((a.duration || targetDuration) - targetDuration) -
+              Math.abs((b.duration || targetDuration) - targetDuration)
+          );
+          return synced[0];
+        }
+        return results[0];
       }
     }
   } catch (err) {
@@ -1020,26 +1203,24 @@ async function queryLrclib(title, artist, durationSec) {
   return null;
 }
 
-/* Apply new spreads to BOOK_CONFIG and re-render book pages */
 function applyGeneratedSpreads(newSpreads, songTitle, artistName) {
   if (!newSpreads || !newSpreads.length) return false;
 
   BOOK_CONFIG.spreads = newSpreads;
 
   if (songTitle) {
-    dom.quickSubtitleInput.value = `Featuring "${songTitle}"${artistName ? ` by ${artistName}` : ""}`;
-    BOOK_CONFIG.coverSubtitle = dom.quickSubtitleInput.value;
+    const subtitleText = `Featuring "${songTitle}"${artistName ? ` by ${artistName}` : ""}`;
+    if (dom.quickSubtitleInput) dom.quickSubtitleInput.value = subtitleText;
+    BOOK_CONFIG.coverSubtitle = subtitleText;
     const el = document.getElementById("coverSubtitleEl");
     if (el) el.textContent = BOOK_CONFIG.coverSubtitle;
   }
 
-  // When new lyrics/spreads are loaded, reset to front cover (page 0) or first spread (page 1) cleanly
-  initPageFlip(0);
+  initPageFlip(state.currentPage);
   renderPhotoInputs();
   return true;
 }
 
-/* UI feedback helper */
 function updateLyricsStatus(msg, type = "loading", showManualSearch = false) {
   if (!dom.lyricsStatusContainer) return;
   dom.lyricsStatusContainer.classList.remove("hidden");
@@ -1060,15 +1241,10 @@ function updateLyricsStatus(msg, type = "loading", showManualSearch = false) {
   `;
 
   if (dom.lyricsManualSearch) {
-    if (showManualSearch) {
-      dom.lyricsManualSearch.classList.remove("hidden");
-    } else {
-      dom.lyricsManualSearch.classList.add("hidden");
-    }
+    dom.lyricsManualSearch.classList.toggle("hidden", !showManualSearch);
   }
 }
 
-/* Fetch lyrics using title & artist, parse and update spreads */
 async function fetchAndApplyLyrics(title, artist, durationSec) {
   updateLyricsStatus(`Searching online lyrics for "${title}"...`, "loading", true);
 
@@ -1077,7 +1253,7 @@ async function fetchAndApplyLyrics(title, artist, durationSec) {
   if (result && result.syncedLyrics) {
     const parsed = parseLrc(result.syncedLyrics);
     if (parsed.length >= 4) {
-      const spreads = groupLyricsIntoSpreads(parsed, durationSec || result.duration || 180);
+      const spreads = groupLyricsIntoSpreads(parsed);
       applyGeneratedSpreads(spreads, result.trackName || title, result.artistName || artist);
       updateLyricsStatus(
         `✓ Found timed lyrics for "${result.trackName || title}" (${spreads.length} spreads created)`,
@@ -1089,7 +1265,7 @@ async function fetchAndApplyLyrics(title, artist, durationSec) {
   }
 
   if (result && result.plainLyrics) {
-    const spreads = groupPlainLyricsIntoSpreads(result.plainLyrics, durationSec || result.duration || 180);
+    const spreads = groupPlainLyricsIntoSpreads(result.plainLyrics, durationSec || result.duration || 244);
     applyGeneratedSpreads(spreads, result.trackName || title, result.artistName || artist);
     updateLyricsStatus(
       `✓ Found plain lyrics for "${result.trackName || title}" (${spreads.length} spreads created)`,
@@ -1099,15 +1275,17 @@ async function fetchAndApplyLyrics(title, artist, durationSec) {
     return true;
   }
 
-  updateLyricsStatus(`Could not automatically find lyrics for "${title}". Try adjusting title & artist below:`, "error", true);
+  updateLyricsStatus(
+    `Could not automatically find lyrics for "${title}". Try adjusting title & artist below:`,
+    "error",
+    true
+  );
   return false;
 }
 
-/* Master function called whenever an audio file is uploaded */
 async function autoGenerateLyricsForFile(file) {
   updateLyricsStatus("Reading audio file & extracting metadata tags...", "loading", false);
 
-  // 1. Check ID3 tags from file
   const tags = await readAudioTags(file);
   const parsedFilename = parseSongFilename(file.name);
 
@@ -1117,29 +1295,43 @@ async function autoGenerateLyricsForFile(file) {
   if (dom.searchTrackInput) dom.searchTrackInput.value = title;
   if (dom.searchArtistInput) dom.searchArtistInput.value = artist;
 
-  // Check if file embedded USLT/lyrics tag exists
   if (tags && (tags.lyrics || (tags.unsyncedLyrics && tags.unsyncedLyrics.lyrics))) {
     const rawLyrics = tags.lyrics || tags.unsyncedLyrics.lyrics;
     const parsedLrc = parseLrc(rawLyrics);
     if (parsedLrc.length >= 4) {
-      const spreads = groupLyricsIntoSpreads(parsedLrc, dom.songAudio.duration || 180);
+      const spreads = groupLyricsIntoSpreads(parsedLrc);
       applyGeneratedSpreads(spreads, title, artist);
       updateLyricsStatus(`✓ Extracted embedded timed lyrics from file (${spreads.length} spreads)`, "success", false);
       return;
     } else {
-      const spreads = groupPlainLyricsIntoSpreads(rawLyrics, dom.songAudio.duration || 180);
+      const spreads = groupPlainLyricsIntoSpreads(rawLyrics, dom.songAudio.duration || 244);
       applyGeneratedSpreads(spreads, title, artist);
       updateLyricsStatus(`✓ Extracted embedded lyrics from file (${spreads.length} spreads)`, "success", false);
       return;
     }
   }
 
-  // 2. Fetch lyrics from online database (LRCLIB)
-  const duration = dom.songAudio.duration || 0;
+  const duration = await waitForAudioMetadata(dom.songAudio, 5000);
   await fetchAndApplyLyrics(title, artist, duration);
 }
 
-/* Switch to an HTML5 Audio Source (from BOOK_CONFIG.audioSrc or local file picker) */
+function waitForAudioMetadata(audioEl, timeoutMs = 5000) {
+  if (isFinite(audioEl.duration) && audioEl.duration > 0) {
+    return Promise.resolve(audioEl.duration);
+  }
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(0), timeoutMs);
+    audioEl.addEventListener(
+      "loadedmetadata",
+      () => {
+        clearTimeout(timer);
+        resolve(audioEl.duration || 0);
+      },
+      { once: true }
+    );
+  });
+}
+
 function loadAudioSource(src, labelText) {
   pauseAudio();
   state.useRealAudio = true;
@@ -1149,10 +1341,15 @@ function loadAudioSource(src, labelText) {
   dom.timeDisplay.textContent = "0:00 / --:--";
 }
 
-/* Wire up Customizer Drawer so user can test local MP3 & photos live */
 function setupCustomizerDrawer() {
   dom.quickTitleInput.value = BOOK_CONFIG.coverTitle;
   dom.quickSubtitleInput.value = BOOK_CONFIG.coverSubtitle;
+  if (dom.searchTrackInput && BOOK_CONFIG.songTitle) {
+    dom.searchTrackInput.value = BOOK_CONFIG.songTitle;
+  }
+  if (dom.searchArtistInput && BOOK_CONFIG.songArtist) {
+    dom.searchArtistInput.value = BOOK_CONFIG.songArtist;
+  }
 
   dom.quickTitleInput.addEventListener("input", (e) => {
     BOOK_CONFIG.coverTitle = e.target.value || "For You, On Your Birthday";
@@ -1171,8 +1368,6 @@ function setupCustomizerDrawer() {
     if (!file) return;
     const blobUrl = URL.createObjectURL(file);
     loadAudioSource(blobUrl, file.name);
-
-    // Auto-generate lyrics from ID3 tags & LRCLIB
     await autoGenerateLyricsForFile(file);
   });
 
@@ -1185,7 +1380,6 @@ function setupCustomizerDrawer() {
     });
   }
 
-  // Generate photo file inputs (for each spread)
   renderPhotoInputs();
 
   const openDrawer = () => dom.customizerDrawer.classList.remove("hidden");
@@ -1196,16 +1390,15 @@ function setupCustomizerDrawer() {
   dom.drawerBackdrop.addEventListener("click", closeDrawer);
 }
 
-/* Bootstrap Everything on Load */
-window.addEventListener("DOMContentLoaded", () => {
-  // Configure built-in synth callbacks
+window.addEventListener("DOMContentLoaded", async () => {
+  initBloomOverlay();
+
   state.synth.onTimeUpdate = (t, d) => handlePlaybackProgress(t, d);
   state.synth.onEnded = () => {
     state.isPlaying = false;
     updatePlayPauseUI();
   };
 
-  // Configure HTML5 <audio> callbacks
   dom.songAudio.addEventListener("loadedmetadata", () => {
     handlePlaybackProgress(0, dom.songAudio.duration);
   });
@@ -1222,17 +1415,22 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // If user configured BOOK_CONFIG.audioSrc, load it automatically
   if (BOOK_CONFIG.audioSrc && BOOK_CONFIG.audioSrc.trim() !== "") {
-    const cleanName = BOOK_CONFIG.audioSrc.split("/").pop();
+    const cleanName =
+      BOOK_CONFIG.songTitle && BOOK_CONFIG.songArtist
+        ? `${BOOK_CONFIG.songTitle} - ${BOOK_CONFIG.songArtist}`
+        : BOOK_CONFIG.audioSrc.split("/").pop();
     loadAudioSource(BOOK_CONFIG.audioSrc, cleanName);
   }
 
-  // Initialize the 3D Flipbook
   initPageFlip(0);
   setupCustomizerDrawer();
 
-  // Player Dock Controls
+  if (BOOK_CONFIG.songTitle) {
+    const duration = await waitForAudioMetadata(dom.songAudio, 5000);
+    await fetchAndApplyLyrics(BOOK_CONFIG.songTitle, BOOK_CONFIG.songArtist || "", duration);
+  }
+
   dom.playPauseBtn.addEventListener("click", () => {
     if (state.isPlaying) {
       pauseAudio();
@@ -1251,7 +1449,6 @@ window.addEventListener("DOMContentLoaded", () => {
     updateAutoSyncUI();
   });
 
-  // Manual Page Navigation Buttons & Keyboard Arrows
   dom.prevPageBtn.addEventListener("click", () => {
     if (state.pageFlip) state.pageFlip.flipPrev();
   });
@@ -1269,10 +1466,11 @@ window.addEventListener("DOMContentLoaded", () => {
     } else if (e.key === " ") {
       e.preventDefault();
       state.isPlaying ? pauseAudio() : playAudio();
+    } else if (e.key === "Escape") {
+      stopDelphiniumBloom();
     }
   });
 
-  // Rebuild book cleanly if switching across mobile/desktop breakpoint
   let resizeTimer;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
